@@ -9,7 +9,6 @@ sum_all = 0
 with open('input.txt') as input:
     for line in input:
         for symbol in re.finditer(r'[^a-zA-z0-9.\n]', line):  # find symbols excluding . and \n
-            print(symbol.group(0))
             symbol_position.append((current_row, symbol.start(0))) # save symbol position
         for number in re.finditer(r'\d+', line):  # find numbers
             number_data = [int(number.group(0)),current_row, number.start(0), number.end(0)]
