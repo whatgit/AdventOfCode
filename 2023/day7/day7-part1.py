@@ -57,22 +57,6 @@ def evaluate_hand(hand):
     return hand_val
 
 
-def tiebreak(df, dup, rank, col_name):
-    grouped = dup.groupby(col_name)
-    broken = True
-    i = 0
-    for name, group in grouped:
-        if len(group) == 1:
-            ind = group.index.values[0]
-            df.at[ind, 'set_rank'] = rank + float(i)
-            i += 1
-        else:
-            group.set_rank =  rank + float(i)
-            i += 1
-            broken = False
-    return broken
-
-
 def tiebreaker(data_frame):
     duplicated_data = data_frame[data_frame.duplicated(subset=['set_rank'], keep=False)]
     if duplicated_data.empty:

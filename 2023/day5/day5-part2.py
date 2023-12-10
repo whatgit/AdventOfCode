@@ -18,6 +18,7 @@ def update_map(df, origin, destination, the_map):
             df.at[index, destination] = destination_range[source_range.index(value)]
     return df
 
+
 result = 0
 origin = ""
 destination = ""
@@ -35,7 +36,7 @@ with open('input.txt') as input:
     for start_seed, n in actual_seed:
         print("Constructing seed set # ", i)
         i+=1
-        sn = range(start_seed, start_seed + n)
+        sn = (start_seed, start_seed + n)
         df_sn = pd.DataFrame({'seed': sn})
         seed_map = pd.concat([seed_map, df_sn], ignore_index=True)
         print("Finish constructing seed")
