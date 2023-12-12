@@ -2,6 +2,7 @@ import re
 from enum import Enum
 import numpy as np
 import shapely
+from skimage.morphology import flood_fill
 
 
 class MapSign(Enum):
@@ -105,7 +106,7 @@ map = []
 function_map = []
 starting_pos = None
 my_pos = None
-with open('p2_ex1.txt') as input_file:
+with open('input.txt') as input_file:
     row = 0
     for line in input_file:
         function_array = []
@@ -134,7 +135,14 @@ with open('p2_ex1.txt') as input_file:
             print("Found a starting point at (", row, ", ", symbols.index('S'), ")")
         map.append(symbols)
         function_map.append(function_array)
+        col = len(line)
         row += 1
+    all_x = list(range(0,row))
+    all_y = list(range(0,col))
+    all_coords = []
+    for x in all_x:
+        for y in all_y:
+            all_coords.append([x,y])
     # for line in map:
     #   print(line)
     if starting_pos:
@@ -154,17 +162,22 @@ with open('p2_ex1.txt') as input_file:
         if newpos == last_pos:
             same_pos = True
 input_file.close()
-print(my_pos)
-my_pos = [[5, 1], [6, 1], [7, 1], [7, 2], [7, 3], [7, 4], [6, 4], [5, 4], [5, 3], [5, 2]]
-my_pos = [[5, 1], [6, 1], [7, 1], [7, 2], [7, 3], [7, 4], [6, 4], [5, 4], [5, 3], [5, 2]]
+# print(len(my_pos))
 the_x = [item[0] for item in my_pos]
 the_y = [item[1] for item in my_pos]
-print(the_x)
-print(the_y)
-print(PolyArea(the_x, the_y))
-pgon = shapely.Polygon(zip(the_x, the_y)) # Assuming the OP's x,y coordinates
-print('------')
-print(pgon.area)
-print(shapely.minimum_clearance(pgon))
-for c in pgon.interiors:
-    print(c)
+# print(PolyArea(the_x, the_y))
+the_pipe = shapely.Polygon(zip(the_x, the_y)) 
+# print('------')
+# print(the_pipe.area)
+
+count = 0
+counted = []
+for p in all_coords:
+    x = p[0]
+    y = p[1]
+    point = shapely.Point(x, y)
+    if the_pipe.contains(point) and point not in my_pos:
+        count += 1
+        counted.append([x+1, y])
+# print(map)
+print(count)
